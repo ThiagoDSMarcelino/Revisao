@@ -4,7 +4,11 @@ using System.Collections.Generic;
 
 Universe universe = new Universe();
 universe.Add(new Earth());
-universe.Add(new Mon());
+universe.Add(new Mon(270));
+universe.Add(new Mon(90, -1));
+universe.Add(new Foguete(20));
+universe.Add(new Foguete(5, -1));
+universe.Add(new Satelite(270));
 
 App.Run(universe, 1000);
 
@@ -54,20 +58,46 @@ public class Earth : Body
         VelocityY = 0f;
         Color = Color.Blue;
         Mass = 5.9742E24f;
-        Size = 127.562f; // 12756,2 km
+        Size = 12.742f;
     }
 }
 
 public class Mon : Body
 {
-    public Mon()
+    public Mon(int angulo, int direcao = 1)
     {
-        Position = new PointF(0f, -385); // distância Terra-Lua
-        VelocityX = 0.001f; // 1 km/s
+        Position = new PointF((384.4f + 12.742f / 2) * MathF.Cos(angulo * (MathF.PI/180)), (384.4f + 12.742f / 2) * MathF.Sin(angulo * (MathF.PI/180))); // distância Terra-Lua
+        VelocityX = 0.00103f * direcao;
         VelocityY = 0;
         Color = Color.White;
         Mass = 7.36E22f;
         Size = 3.4748f; // 3474,8 km
+    }
+}
+
+public class Foguete : Body
+{
+    public Foguete(int velocidade, int direcao = 1)
+    {
+        Position = new PointF(0, 12.742f / 2 * direcao);
+        VelocityX = 0;
+        VelocityY = 0.001f * direcao * velocidade;
+        Color = Color.White;
+        Mass = 5E5f;
+        Size = 3;
+    }
+}
+
+public class Satelite : Body
+{
+    public Satelite(int angulo, int direcao = 1)
+    {
+        Position = new PointF((10f + 12.742f / 2) * MathF.Cos(angulo * (MathF.PI/180)), (10f + 12.742f / 2) * MathF.Sin(angulo * (MathF.PI/180)));
+        VelocityX = MathF.Sqrt((6.6743E-11f * 5.9742E24f) / (12.742f / 2 + 10f)) / 1E9f;
+        VelocityY = 0;
+        Color = Color.White;
+        Mass = 5E5f;
+        Size = 3;
     }
 }
 
